@@ -104,6 +104,24 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 23001,
+      // 代理配置示例（配合相对路径VITE_APP_AXIOS_BASEURL使用）
+      // 使用场景：开发环境需要将API请求转发到其他域名时启用
+      // 用法：
+      // 1. 将 .env.development 中的 VITE_APP_AXIOS_BASEURL 设置为相对路径，如 "/api"
+      // 2. 取消下方proxy配置的注释，并修改target为实际的后端地址
+      // proxy: {
+      //   '/api': {
+      //     target: 'https://mock.127516.com', // 实际后端地址
+      //     changeOrigin: true,
+      //     rewrite: (path) => path.replace(/^\/api/, ''), // 可选：去掉/api前缀
+      //   },
+      //   // 也可以配置多个代理
+      //   // '/proxy_url': {
+      //   //   target: env.VITE_APP_PROXY_URL,
+      //   //   changeOrigin: true,
+      //   //   rewrite: (path) => path.replace(/^\/proxy_url/, ''),
+      //   // },
+      // },
     },
   }
 })

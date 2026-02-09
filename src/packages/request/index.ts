@@ -11,6 +11,8 @@ import type { RequestConfig } from './types'
 import { requestConfig } from './config'
 
 // 设置基础URL（由环境变量控制）
+// 支持绝对路径（如 "https://api.example.com"）和相对路径（如 "/api"）
+// 相对路径会基于当前应用所在的域名进行请求
 const baseURL = import.meta.env.VITE_APP_AXIOS_BASEURL as string
 if (baseURL) {
   axios.defaults.baseURL = baseURL

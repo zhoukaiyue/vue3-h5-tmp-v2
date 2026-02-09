@@ -23,7 +23,49 @@
 
 请求库会自动读取环境变量作为基础地址：
 
-- `VITE_APP_AXIOS_BASEURL`：赋值给 `axios.defaults.baseURL`
+- `VITE_APP_AXIOS_BASEURL`：赋值给 `axios.defaults.baseURL`，**支持绝对路径和相对路径**
+
+**绝对路径示例**：
+
+```bash
+# 直接指向后端API域名
+VITE_APP_AXIOS_BASEURL = "https://api.example.com"
+```
+
+**相对路径示例**：
+
+```bash
+# 相对于当前应用域名，适用于以下场景：
+# 1. 开发环境使用Vite代理转发（配合vite.config.ts的proxy配置）
+# 2. 生产环境前后端同域部署
+VITE_APP_AXIOS_BASEURL = "/api"
+```
+
+**开发环境使用相对路径 + 代理配置示例**：
+
+1. 在 `.env.development` 中设置：
+
+```bash
+VITE_APP_AXIOS_BASEURL = "/api"
+```
+
+2. 在 `vite.config.ts` 中配置代理：
+
+```ts
+export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://backend.example.com', // 实际后端地址
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''), // 可选：去掉/api前缀
+      },
+    },
+  },
+})
+```
+
+这样配置后，所有 `/api/*` 的请求都会被转发到 `https://backend.example.com/*`
 
 其他默认配置在 `src/packages/request/config.ts` 中维护。
 
