@@ -55,6 +55,52 @@ pnpm lint:type
 
 > 注：详细请阅读 `package.json` 以及对应的环境配置文件（`.env.development`、`.env.test`、`.env.production`）。
 
+## 环境配置说明
+
+### API 请求地址配置（VITE_APP_AXIOS_BASEURL）
+
+项目支持多种 API 地址配置方式，根据实际部署情况选择：
+
+#### 1. 前后端同域名部署（推荐）
+
+如果前端和后端部署在同一个域名下，建议使用**相对路径**：
+
+```env
+# .env.production
+VITE_APP_AXIOS_BASEURL = "/api"
+```
+
+**实际效果：**
+- 部署地址：`https://example.com`
+- 请求地址：`https://example.com/api/xxx`
+- 优势：无需跨域配置，域名变更无需修改配置
+
+#### 2. 前后端不同域名部署
+
+如果前端和后端部署在不同域名，使用**完整 URL**：
+
+```env
+# .env.production
+VITE_APP_AXIOS_BASEURL = "https://api.example.com"
+```
+
+**实际效果：**
+- 前端地址：`https://www.example.com`
+- 请求地址：`https://api.example.com/xxx`
+- 注意：需要在后端配置 CORS 跨域支持
+
+#### 3. 开发环境代理配置
+
+开发环境如需避免跨域问题，可配置代理：
+
+```env
+# .env.development
+VITE_APP_AXIOS_BASEURL = "/proxy_url"
+VITE_APP_PROXY_URL = "https://api.example.com"
+```
+
+然后在 `vite.config.ts` 中添加 proxy 配置（如需要）。
+
 ## 开发基础规范
 
 <font color="red">如果设计稿的尺寸不是 750，而是 375 或其他大小，请在 `postcss.config.js` 的 `postcss-pxtorem` 中及时调整 `rootValue`。</font>

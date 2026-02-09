@@ -25,6 +25,30 @@
 
 - `VITE_APP_AXIOS_BASEURL`：赋值给 `axios.defaults.baseURL`
 
+**配置说明：**
+
+1. **前后端不同域名**：使用完整的 URL 地址
+   ```env
+   VITE_APP_AXIOS_BASEURL = "https://api.example.com"
+   ```
+   适用场景：前端部署在 `https://www.example.com`，后端 API 在 `https://api.example.com`
+
+2. **前后端同域名**（推荐）：使用相对路径
+   ```env
+   VITE_APP_AXIOS_BASEURL = "/api"
+   ```
+   适用场景：前后端部署在同一域名下，如 `https://example.com`
+   - 优势：无需处理跨域问题
+   - 实际请求地址会自动拼接当前域名：`https://example.com/api/xxx`
+   - 部署简单，域名变更无需修改配置
+
+3. **开发环境使用代理**：使用代理路径（解决开发时跨域问题）
+   ```env
+   VITE_APP_AXIOS_BASEURL = "/proxy_url"
+   VITE_APP_PROXY_URL = "https://api.example.com"
+   ```
+   需要在 `vite.config.ts` 中配置 proxy 代理规则
+
 其他默认配置在 `src/packages/request/config.ts` 中维护。
 
 ### 2. 创建一个请求（以 POST 为例）
