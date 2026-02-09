@@ -55,6 +55,64 @@ pnpm lint:type
 
 > 注：详细请阅读 `package.json` 以及对应的环境配置文件（`.env.development`、`.env.test`、`.env.production`）。
 
+## API 请求配置
+
+### VITE_APP_AXIOS_BASEURL 配置说明
+
+`VITE_APP_AXIOS_BASEURL` 是 axios 的基础请求地址，**支持绝对路径和相对路径**两种配置方式：
+
+#### 1. 绝对路径（推荐用于跨域API）
+
+```bash
+# 直接配置完整的API地址
+VITE_APP_AXIOS_BASEURL = "https://api.example.com"
+```
+
+适用场景：
+- 生产环境的跨域API
+- 开发环境直接调用第三方API（需要API支持CORS）
+
+#### 2. 相对路径（推荐用于开发环境代理）
+
+```bash
+# 配置相对路径，请求会发送到当前应用域名
+VITE_APP_AXIOS_BASEURL = "/api"
+```
+
+适用场景：
+- 开发环境使用Vite代理转发（避免CORS问题）
+- 生产环境前后端同域部署
+
+#### 开发环境使用相对路径配置步骤
+
+1. 修改 `.env.development` 文件：
+
+```bash
+VITE_APP_AXIOS_BASEURL = "/api"
+```
+
+2. 在 `vite.config.ts` 中启用代理配置（取消注释并修改）：
+
+```ts
+server: {
+  host: '0.0.0.0',
+  port: 23001,
+  proxy: {
+    '/api': {
+      target: 'https://backend.example.com', // 实际后端地址
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''), // 可选：去掉/api前缀
+    },
+  },
+},
+```
+
+3. 重启开发服务器
+
+**参考示例**：查看 `.env.development.relative-path.example` 文件获取完整配置示例。
+
+**详细文档**：请参阅 `src/packages/request/README.md` 了解更多请求配置选项。
+
 ## 开发基础规范
 
 <font color="red">如果设计稿的尺寸不是 750，而是 375 或其他大小，请在 `postcss.config.js` 的 `postcss-pxtorem` 中及时调整 `rootValue`。</font>
