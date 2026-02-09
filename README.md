@@ -54,6 +54,8 @@ pnpm lint:type
 ```
 
 > 注：详细请阅读 `package.json` 以及对应的环境配置文件（`.env.development`、`.env.test`、`.env.production`）。
+> 
+> 环境配置文件模板参考：`.env.example`
 
 ## 环境配置说明
 
@@ -74,6 +76,23 @@ VITE_APP_AXIOS_BASEURL = "/api"
 - 部署地址：`https://example.com`
 - 请求地址：`https://example.com/api/xxx`
 - 优势：无需跨域配置，域名变更无需修改配置
+
+**典型部署场景：**
+- Nginx 同时托管前端静态文件和后端 API
+- 前端访问：`https://example.com/` （静态文件）
+- 后端访问：`https://example.com/api/` （API 接口）
+- 配置示例：
+  ```nginx
+  # Nginx 配置示例
+  location / {
+      root /var/www/html;  # 前端静态文件目录
+      try_files $uri $uri/ /index.html;
+  }
+  
+  location /api/ {
+      proxy_pass http://localhost:3000/;  # 后端服务
+  }
+  ```
 
 #### 2. 前后端不同域名部署
 
